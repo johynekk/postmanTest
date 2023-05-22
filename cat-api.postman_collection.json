@@ -1,0 +1,219 @@
+{
+	"info": {
+		"_postman_id": "3f78d0d7-640b-474f-bbb3-64faca36c7e2",
+		"name": "cat-api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "27144793",
+		"_collection_link": "https://martian-meadow-987229.postman.co/workspace/Team-Workspace~a8a77b64-e418-451b-8c8b-5142197ab8a8/collection/27144793-3f78d0d7-640b-474f-bbb3-64faca36c7e2?action=share&creator=27144793&source=collection_link"
+	},
+	"item": [
+		{
+			"name": "https://cat-fact.herokuapp.com/facts/ Copy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"HTTP status\", function(){\r",
+							"    var jsonData = pm.response.json();\r",
+							"    var httpStatus = pm.response.status;\r",
+							"    pm.response.to.have.status(200)\r",
+							"    if(httpStatus = 200){\r",
+							"        console.log(\"Status is correct\");\r",
+							"        var objectLength = jsonData.length;\r",
+							"        console.log(objectLength);\r",
+							"        for(var i = 0; i < objectLength; i++)\r",
+							"            pm.test(\"Expected attribute\", function(){\r",
+							"                if(pm.expect(jsonData[i]).to.have.property(\"text\")){\r",
+							"                    var textValue = jsonData[i].text;\r",
+							"                    console.log(\"vypisuji hodnoty v atributu text: \" +textValue);\r",
+							"                    pm.expect(textValue).to.be.a(\"string\");\r",
+							"                    if(typeof textValue == \"string\"){\r",
+							"                        pm.test(\"Text matches string\", function () {\r",
+							"                            console.log(\"Porovnavam hodnoty: \"+textValue+\" a \"+jsonData[i].text);\r",
+							"                            pm.expect(jsonData[i].text).to.include(textValue);\r",
+							"                        });\r",
+							"                    }\r",
+							"                }\r",
+							"                pm.expect(jsonData[i].type).to.eql(\"cat\");\r",
+							"                pm.environment.set(\"Text\"+[i], jsonData[i].text);\r",
+							"                console.log(jsonData[i].text)\r",
+							"            });\r",
+							"    }else{\r",
+							"        console.log(\"Status not correct:\" +httpStatus);\r",
+							"    }\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"var environmentVariables = pm.environment.toObject();\r",
+							"var variableLength = Object.keys(pm.environment.toObject()).length;\r",
+							"console.log(\"nb of variables: \" + variableLength);\r",
+							"console.log(\"Proměnné v prostředí:\");\r",
+							"console.log(environmentVariables);\r",
+							"var count = 0;\r",
+							"var listOfVariables = [];\r",
+							"for (var variableName in environmentVariables) {\r",
+							"    if (variableName.includes(\"Text\")) {\r",
+							"        count++;\r",
+							"        listOfVariables.push(variableName);\r",
+							"         //console.log(\"promenna nalezena\");\r",
+							"    }\r",
+							"}\r",
+							"console.log(listOfVariables);\r",
+							"console.log(count);\r",
+							"listOfVariables.forEach(function(variableName) {\r",
+							"    pm.environment.unset(variableName);\r",
+							"    console.log(\"odstranuji\");\r",
+							"});\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{http-url}}/facts/",
+					"host": [
+						"{{http-url}}"
+					],
+					"path": [
+						"facts",
+						""
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "https://cat-fact.herokuapp.com/facts/",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{http-url}}/facts/",
+							"host": [
+								"{{http-url}}"
+							],
+							"path": [
+								"facts",
+								""
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Server",
+							"value": "Cowboy"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "1859"
+						},
+						{
+							"key": "Etag",
+							"value": "W/\"743-wddLBn/iA1pX11XPOeCdXfKM6GE\""
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 28 Apr 2023 09:12:50 GMT"
+						},
+						{
+							"key": "Via",
+							"value": "1.1 vegur"
+						}
+					],
+					"cookie": [],
+					"body": "[\n    {\n        \"status\": {\n            \"verified\": true,\n            \"sentCount\": 1\n        },\n        \"_id\": \"58e008800aac31001185ed07\",\n        \"user\": \"58e007480aac31001185ecef\",\n        \"text\": \"Wikipedia has a recording of a cat meowing, because why not?\",\n        \"__v\": 0,\n        \"source\": \"user\",\n        \"updatedAt\": \"2020-08-23T20:20:01.611Z\",\n        \"type\": \"cat\",\n        \"createdAt\": \"2018-03-06T21:20:03.505Z\",\n        \"deleted\": false,\n        \"used\": false\n    },\n    {\n        \"status\": {\n            \"verified\": true,\n            \"sentCount\": 1\n        },\n        \"_id\": \"58e008630aac31001185ed01\",\n        \"user\": \"58e007480aac31001185ecef\",\n        \"text\": \"When cats grimace, they are usually \\\"taste-scenting.\\\" They have an extra organ that, with some breathing control, allows the cats to taste-sense the air.\",\n        \"__v\": 0,\n        \"source\": \"user\",\n        \"updatedAt\": \"2020-08-23T20:20:01.611Z\",\n        \"type\": \"cat\",\n        \"createdAt\": \"2018-02-07T21:20:02.903Z\",\n        \"deleted\": false,\n        \"used\": false\n    },\n    {\n        \"status\": {\n            \"verified\": true,\n            \"sentCount\": 1\n        },\n        \"_id\": \"58e00a090aac31001185ed16\",\n        \"user\": \"58e007480aac31001185ecef\",\n        \"text\": \"Cats make more than 100 different sounds whereas dogs make around 10.\",\n        \"__v\": 0,\n        \"source\": \"user\",\n        \"updatedAt\": \"2020-08-23T20:20:01.611Z\",\n        \"type\": \"cat\",\n        \"createdAt\": \"2018-02-11T21:20:03.745Z\",\n        \"deleted\": false,\n        \"used\": false\n    },\n    {\n        \"status\": {\n            \"verified\": true,\n            \"sentCount\": 1\n        },\n        \"_id\": \"58e009390aac31001185ed10\",\n        \"user\": \"58e007480aac31001185ecef\",\n        \"text\": \"Most cats are lactose intolerant, and milk can cause painful stomach cramps and diarrhea. It's best to forego the milk and just give your cat the standard: clean, cool drinking water.\",\n        \"__v\": 0,\n        \"source\": \"user\",\n        \"updatedAt\": \"2020-08-23T20:20:01.611Z\",\n        \"type\": \"cat\",\n        \"createdAt\": \"2018-03-04T21:20:02.979Z\",\n        \"deleted\": false,\n        \"used\": false\n    },\n    {\n        \"status\": {\n            \"verified\": true,\n            \"sentCount\": 1\n        },\n        \"_id\": \"58e008780aac31001185ed05\",\n        \"user\": \"58e007480aac31001185ecef\",\n        \"text\": \"Owning a cat can reduce the risk of stroke and heart attack by a third.\",\n        \"__v\": 0,\n        \"source\": \"user\",\n        \"updatedAt\": \"2020-08-23T20:20:01.611Z\",\n        \"type\": \"cat\",\n        \"createdAt\": \"2018-03-29T20:20:03.844Z\",\n        \"deleted\": false,\n        \"used\": false\n    }\n]"
+				},
+				{
+					"name": "one-object",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{http-url}}/test/",
+							"host": [
+								"{{http-url}}"
+							],
+							"path": [
+								"test",
+								""
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Server",
+							"value": "Cowboy"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "1859"
+						},
+						{
+							"key": "Etag",
+							"value": "W/\"743-wddLBn/iA1pX11XPOeCdXfKM6GE\""
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 28 Apr 2023 09:12:50 GMT"
+						},
+						{
+							"key": "Via",
+							"value": "1.1 vegur"
+						}
+					],
+					"cookie": [],
+					"body": "[\n    {\n        \"status\": {\n            \"verified\": true,\n            \"sentCount\": 1\n        },\n        \"_id\": \"58e008800aac31001185ed07\",\n        \"user\": \"58e007480aac31001185ecef\",\n        \"text\": \"Wikipedia has a recording of a cat meowing, because why not?\",\n        \"__v\": 0,\n        \"source\": \"user\",\n        \"updatedAt\": \"2020-08-23T20:20:01.611Z\",\n        \"type\": \"cat\",\n        \"createdAt\": \"2018-03-06T21:20:03.505Z\",\n        \"deleted\": false,\n        \"used\": false\n    }\n]"
+				}
+			]
+		}
+	]
+}
